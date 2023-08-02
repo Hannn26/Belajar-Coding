@@ -72,3 +72,43 @@ function mengelompokkanAngka(arr) {
   console.log(mengelompokkanAngka([])); // [ [], [], [] ]
 
 
+// Soal 3
+
+//diberikan sebuah function groupAnimals(animals) yang menerima satu parameter berupa array,
+//fungsi ini akan me-return array 2 dimensi
+
+function groupAnimals(animals) {
+  // you can only write your code here!
+  let temp = [];
+  let hasil = [];
+  animals.sort();
+  for(let i = 0; i < animals.length; i++){
+    if(i == animals.length-1){
+        if(animals[i][0] == animals[i-2][0]){
+            temp.push(animals[i])
+        }
+        else{
+            temp.push(animals[i]);
+            hasil.push(temp);
+            temp = [];
+        }
+    }
+    else{
+        if(animals[i][0] == animals[i+1][0]){
+            temp.push(animals[i])
+        }
+        else{
+            temp.push(animals[i]);
+            hasil.push(temp);
+            temp = [];
+        }
+    }
+}
+return hasil;
+}
+
+// TEST CASES
+console.log(groupAnimals(['cacing', 'ayam', 'kuda', 'anoa', 'kancil']));
+// [ ['ayam', 'anoa'], ['cacing'], ['kuda', 'kancil'] ]
+console.log(groupAnimals(['cacing', 'ayam', 'kuda', 'anoa', 'kancil', 'unta', 'cicak' ]));
+// [ ['ayam', 'anoa'], ['cacing', 'cicak'], ['kuda', 'kancil'], ['unta'] ]
