@@ -279,10 +279,87 @@ Note:
 
 function travelingIndonesia(arr, emoney) {
   //code here
+  let destinasi = ["Yogyakarta", "Semarang","Surabaya","Denpasar"];
   let Pesawat = 275000;
   let Kereta = 250000;
   let Bis = 225000;
-  if(emoney == "OVO")
+  if(emoney == "OVO"){
+    Pesawat -= (Pesawat * 15/100);
+    Kereta -= (Kereta * 15/100);
+    Bis -= (Bis * 15/100);
+  }
+  else if(emoney == "Dana"){
+    Pesawat -= (Pesawat * 10/100);
+    Kereta -= (Kereta * 10/100);
+    Bis -= (Bis * 10/100);
+  }
+  else if(emoney == "Gopay"){
+    Pesawat -= (Pesawat * 5/100);
+    Kereta -= (Kereta * 5/100);
+    Bis -= (Bis * 5/100);
+  }
+
+  let tempArr = [];
+  let tempStr = "";
+  let newArr = [];
+  for(let i = 0; i < arr.length;i++){
+    for(let j = 0; j <= arr[i].length;j++){
+      if(arr[i][j] == "-" || arr[i][j] == undefined){
+        tempArr.push(tempStr);
+        tempStr = "";
+      }
+      else{
+        tempStr += arr[i][j];
+      }
+    }
+    newArr.push(tempArr)
+    tempArr = [];
+  }
+
+  let obj = {};
+  let objArr = [];
+  for(let a = 0; a < newArr.length;a++){
+    obj = { 
+    name: newArr[a][0],
+    departureCity: newArr[a][1],
+    destinationCity: newArr[a][2],
+    transport: newArr[a][3],
+    totalCost: 0
+    }
+    objArr.push(obj);
+    obj = {};
+  }
+
+  let indexAwal = 0;
+  let indexAkhir = 0;
+  let index = 0
+  for(let k = 0; k < objArr.length;k++){
+    for(let l = 0; l < destinasi.length;l++){
+      if(objArr[k].departureCity == destinasi[l]){
+        indexAwal = l;
+      }
+      else if(objArr[k].destinationCity == destinasi[l]){
+        indexAkhir = l
+      }
+    }
+    index = Math.abs(indexAkhir - indexAwal);
+    objArr[k].totalCost = index;
+    index = 0;
+  }
+
+  for(let x = 0; x < objArr.length;x++){
+    if(objArr[x].transport == "Pesawat"){
+      objArr[x].totalCost *= Pesawat;
+    }
+    else if(objArr[x].transport == "Bis"){
+      objArr[x].totalCost *= Bis;
+    }
+    else{
+      objArr[x].totalCost *= Kereta;
+    }
+  }
+
+  return objArr;
 };
 
 console.log(travelingIndonesia(['Danang-Yogyakarta-Semarang-Bis', 'Alif-Denpasar-Surabaya-Kereta', 'Bahari-Semarang-Denpasar-Pesawat'], 'OVO'));
@@ -346,3 +423,100 @@ console.log(travelingIndonesia(['Putra-Denpasar-Yogyakarta-Pesawat'], 'Cash'));
 //     totalCost: 825000 } ]
 // */
 console.log(travelingIndonesia([], 'Cash')); // [];
+
+console.log(`\n`);
+
+/**
+Delete Undefined Keys
+=====================
+Implementasikan function `deleteUndefinedKeys` untuk menghapus
+key di dalam object yang memiliki value undefined.
+
+Function ini akan menerima satu parameter yaitu `data`
+yang memiliki tipe data array.
+Di dalam array `data` terdapat beberapa object yang memiliki
+value undefined. Tugas kamu adalah untuk menghapus key tersebut
+
+# Contoh I/O
+Contoh input dan output bisa kamu lihat di test case
+
+# Kondisi khusus
+- Jika tidak ada elemen di dalam `data`, maka tampilkan 'No data'
+
+CONSTRAINTS
+============
+- DILARANG menggunakan built-in function .map, .filter
+
+*/
+
+function deleteUndefinedKeys(data) {
+  //code here
+  if(data.length == 0){
+    return "No Data";
+  }
+  for(let i = 0; i < data.length;i++){
+    for(let key in data[i]){
+      let object = data[i];
+      if(object[key] == undefined){
+        delete object[key];
+      }
+    }
+  }
+  return data;
+}
+
+console.log(deleteUndefinedKeys([{
+    name: 'Dimitri',
+    address: undefined,
+    email: 'dimitri@mail.com',
+    age: undefined,
+    gender: 'male'
+  },
+  {
+    name: 'Alexei',
+    address: 'Earth',
+    email: undefined,
+    age: 18,
+    gender: 'male'
+  }
+]));
+/*
+  [ { name: 'Dimitri', email: 'dimitri@mail.com', gender: 'male' },
+    { name: 'Alexei', address: 'Earth', age: 18, gender: 'male' } ]
+*/
+
+console.log(deleteUndefinedKeys([{
+    band: 'Ghost',
+    formed: 2006,
+    members: ['Papa Emeritus', 'Alpha', 'Omega', 'Water', 'Wind', 'Earth'],
+    genre: 'Heavy Metal',
+    rating: undefined
+  },
+  {
+    band: 'BABYMETAL',
+    formed: undefined,
+    members: ['SU-METAL', 'MOAMETAL', 'YUIMETAL'],
+    genre: 'Kawaii Metal',
+    rating: undefined
+  },
+  {
+    band: 'Avatar',
+    formed: 2006,
+    members: undefined,
+    genre: undefined,
+    rating: 5
+  }
+]));
+/*
+[ { band: 'Ghost',
+    formed: 2006,
+    members: [ 'Papa Emeritus', 'Alpha', 'Omega', 'Water', 'Wind', 'Earth' ],
+    genre: 'Heavy Metal' },
+  { band: 'BABYMETAL',
+    members: [ 'SU-METAL', 'MOAMETAL', 'YUIMETAL' ],
+    genre: 'Kawaii Metal' },
+  { band: 'Avatar', formed: 2006, rating: 5 } ]
+*/
+
+console.log(deleteUndefinedKeys([]));
+// No data
